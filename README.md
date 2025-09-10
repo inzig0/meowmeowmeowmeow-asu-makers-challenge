@@ -5,8 +5,10 @@ This is the source code for team "meowmeowmeowmeow :3" in the 2025 [Makers of Ch
 
 ## Building
 
-On the Raspberry Pi, within the user's home directory, invoke: 
+On the Raspberry Pi, within the user's home directory, run: 
+
 `./build.sh`
+
 in the terminal. This will automatically fetch the most recent changes to this repo and invoke `main.py`.
 
 ## Contributing
