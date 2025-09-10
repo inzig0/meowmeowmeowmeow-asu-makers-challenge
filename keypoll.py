@@ -1,6 +1,10 @@
 import time
 
 
+# Interface for polling all music keys.
+#
+# This class should interface the GPIO to get all pressed
+# music keys.
 class KeyPoll:
 
     set = [];
