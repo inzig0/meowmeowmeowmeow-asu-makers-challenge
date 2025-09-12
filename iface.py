@@ -1,4 +1,4 @@
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 
@@ -16,7 +16,7 @@ class UserInterface:
 
         # Any required initialization code will live here
 
-        #GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BOARD)
 
         self.last_poll = time.gmtime(0)
 
