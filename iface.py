@@ -9,14 +9,18 @@ import time
 class UserInterface:
     __doc__ = "Interface for controls & statuses.";
 
+    rec_pin = 11;
+
     start_rec = False;
-    ots = True; # For dummy interface. Do not use.
+    #ots = True; # For dummy interface. Do not use.
 
     def __init__(self):
 
         # Any required initialization code will live here
 
         GPIO.setmode(GPIO.BOARD)
+
+        GPIO.setup(self.rec_pin, GPIO.IN)
 
         self.last_poll = time.gmtime(0)
 
@@ -26,9 +30,7 @@ class UserInterface:
 
         self.last_poll = time.time();
 
-        if self.ots:
+        if GPIO.input(rec_pin):
             self.start_rec = True;
         else:
             self.start_rec = False;
-
-        self.ots = False;
