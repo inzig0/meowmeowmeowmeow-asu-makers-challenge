@@ -30,7 +30,7 @@ class UserInterface:
 
         self.last_poll = time.time();
 
-        if GPIO.input(rec_pin):
+        if GPIO.input(self.rec_pin):
             self.start_rec = True;
         else:
             self.start_rec = False;
