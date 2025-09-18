@@ -4,12 +4,18 @@ from iface import UserInterface
 from keypoll import KeyPoll
 
 
-CONST_UI_POLL_RATE = 1; # Both in seconds
-CONST_REC_POLL_RATE = 0.1;
-CONST_REC_DURATION = 10;
+CONST_UI_POLL_RATE = 1;      # Interface poll rate.
+CONST_REC_POLL_RATE = 0.1;   # Music key poll rate.
+CONST_REC_DURATION = 10;     # Music record duration.
+CONST_SR = 48000;            # Sample rate. Should match all sound banks.
+CONST_POLLING_TOLERANCE = 5; # How many samples may pass before the next keystroke is considered a new chord
+                             # Playing the same note again should register as a new chord regardless of tolerance
 
 ui = UserInterface();   # See iface.py
 key_poller = KeyPoll(); # See keypoll.py
+
+
+#def load_bank(name):
 
 
 def record():
@@ -26,6 +32,10 @@ def record():
 
     return keylog
 
+def render(keylog):
+    sps = CONST_REC_DURATION/CONST_SR; # Seconds per sample
+
+
 def main():
     while True:
 
@@ -35,7 +45,7 @@ def main():
             print("Record...");
             keylog = record();
 
-            print(str(keylog));
+            render(keylog);
 
         time.sleep(CONST_UI_POLL_RATE);
 
