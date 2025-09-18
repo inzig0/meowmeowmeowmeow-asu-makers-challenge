@@ -3,6 +3,7 @@ import time
 from iface import UserInterface
 from keypoll import KeyPoll
 from banks import AudioStream, AudioBank
+from pyaudio import PyAudio, paInt16
 
 
 CONST_UI_POLL_RATE = 1;         # Interface poll rate.
@@ -47,7 +48,6 @@ def render(keylog, bank):
         if render_ts >= curr_ts:
             # Add code here to transcribe audio upon PCM file
             for k in curr_ks:
-                print(k);
                 new_stream = bank.spawn_stream(k);
                 new_stream.parent_index = len(stream_list);
 
@@ -69,10 +69,12 @@ def render(keylog, bank):
         final_pcm += byte.to_bytes(1, 'big'); # Endianess doesn't matter since it's only one byte
         render_ts += sps;
 
-    return final_pcm
+    return bytes(final_pcm)
 
 def main():
     bank = AudioBank("sine", 1);
+    paudio = PyAudio();
+    astream = paudio.open(rate=CONST_SR, channels=1, output=True, format=paInt16);
 
     while True:
 
@@ -83,6 +85,8 @@ def main():
             keylog = record();
 
             pcm = render(keylog, bank);
+            print(str(astream.get_read_available()));
+            astream.write(pcm);
 
             print(str(pcm));
 
