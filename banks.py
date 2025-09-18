@@ -8,6 +8,7 @@ class AudioStream:
     cursor = 0;
     buf = None;
     finished = False;
+    parent_index = -1;
 
     def __init__(self, indexable):
         self.buf = indexable;
@@ -34,9 +35,8 @@ class AudioBank:
         for o in range(1, octave_n + 1):
 
             for k in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
-                sample_barr = open("./banks/" + bank_path + "/" + k + str(o) + ".pcm", 'rb');
-                sample_base_stream = AudioStream(sample_barr);
-                self.key_lut.append(sample_base_stream);
+                sample_barr = open("./banks/" + bank_path + "/" + k + str(o) + ".pcm", 'rb').read();
+                self.key_lut.append(sample_barr);
 
     def spawn_stream(self, idx):
-        return deepcopy(self.key_lut[self.idx])
+        return AudioStream(self.key_lut[idx])

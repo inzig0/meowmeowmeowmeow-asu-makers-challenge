@@ -51,7 +51,7 @@ class KeyPoll:
         if self.inc == False:
             self.note -= 1;
 
-        if self.note == 13:
+        if self.note == 6:
             self.inc = False;
         if self.note == 0:
             self.inc = True;
