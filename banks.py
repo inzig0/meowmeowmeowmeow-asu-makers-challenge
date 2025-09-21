@@ -1,4 +1,5 @@
 from copy import deepcopy
+from numpy import array, int16
 
 
 
@@ -8,7 +9,6 @@ class AudioStream:
     cursor = 0;
     buf = None;
     finished = False;
-    parent_index = -1;
 
     def __init__(self, indexable):
         self.buf = indexable;
@@ -35,8 +35,16 @@ class AudioBank:
         for o in range(1, octave_n + 1):
 
             for k in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
+                sample_list = [];
                 sample_barr = open("./banks/" + bank_path + "/" + k + str(o) + ".pcm", 'rb').read();
-                self.key_lut.append(sample_barr);
+
+                for b in range(1, int(len(sample_barr)/2)):
+                    b = b*2;
+                    b_chunk = sample_barr[b-2:b];
+                    short = (b_chunk[1] + (b_chunk[0] << 8)) - 32767;
+                    sample_list.append(short)
+
+                self.key_lut.append(array(sample_list, dtype=int16));
 
     def spawn_stream(self, idx):
         return AudioStream(self.key_lut[idx])
