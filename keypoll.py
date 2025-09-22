@@ -24,6 +24,7 @@ class KeyPoll:
     def poll_keys(self):
 
         timestamp = time.time();
+        #print(str(timestamp))
         presses = [];
 
         # Poll all newly-pressed keys in this space.
@@ -51,7 +52,7 @@ class KeyPoll:
         if self.inc == False:
             self.note -= 1;
 
-        if self.note == 13:
+        if self.note == 6:
             self.inc = False;
         if self.note == 0:
             self.inc = True;
