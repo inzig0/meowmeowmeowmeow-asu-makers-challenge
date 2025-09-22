@@ -5,6 +5,7 @@ from keypoll import KeyPoll
 from banks import AudioStream, AudioBank
 import sounddevice as sdev
 from numpy import array, int16
+from math import e
 
 
 CONST_UI_POLL_RATE = 1;         # Interface poll rate.
@@ -15,12 +16,17 @@ CONST_POLLING_TOLERANCE = 5;    # How many samples may pass before the next keys
                                 # Playing the same note again should register as a new chord regardless of tolerance
 CONST_OCTAVE_COUNT = 1;         # Number of octaves
 CONST_DEVICE_IDX = 0;
+CONST_MASTER_VOL = 5;
 
 
 ui = UserInterface();   # See iface.py
 key_poller = KeyPoll(); # See keypoll.py
 
 
+
+# Hyperbolic tangent -- for signal mixing
+def tanh(x):
+    return ( pow(e, x) - pow(e, -x) )/( pow(e, x) + pow(e, -x) )
 
 def record():
     keylog = [];
@@ -37,17 +43,19 @@ def record():
     return keylog
 
 def render(keylog, bank):
-    sps = CONST_REC_DURATION/CONST_SR; # Seconds per sample
+    tps = 1/CONST_SR; # Time per sample
     curr_i = 0;
     (curr_ts, curr_ks) = keylog[0]; # IVs
     render_ts = curr_ts; # First timestamp
+    master = CONST_MASTER_VOL;
 
     stream_list = [];
     final_pcm = [];
 
     iterating = True;
-    while iterating:
-        if render_ts >= curr_ts:
+    unfinished = True;
+    while unfinished:
+        if render_ts >= curr_ts and iterating:
             # Adds streams to a list of transcribing streams
             for k in curr_ks:
                 new_stream = bank.spawn_stream(k);
@@ -63,17 +71,24 @@ def render(keylog, bank):
             else:
                 (curr_ts, curr_ks) = keylog[curr_i];
 
-        render_ts += sps;
+        render_ts += tps;
 
         # Transcribe shorts from all streams into one short
-        short = 0;
+        sigsum = 0;
         for s in stream_list:
-            short = short | s.advance();
+            sigsum += (s.advance()/master);
 
             if s.finished:
                 stream_list.remove(s);
 
+        short = sigsum;
+
         final_pcm.append(short);
+
+        if not iterating and len(stream_list) == 0:
+            unfinished = False;
+
+    print(len(final_pcm));
 
     return array(final_pcm, dtype=int16);
 
@@ -100,6 +115,7 @@ def main():
             sdev.wait();
 
             print("Done!");
+
 
         time.sleep(CONST_UI_POLL_RATE);
 

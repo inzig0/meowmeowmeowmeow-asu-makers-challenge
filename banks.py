@@ -34,14 +34,14 @@ class AudioBank:
 
         for o in range(1, octave_n + 1):
 
-            for k in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
+            for k in ['C', 'D', 'E', 'F', 'G', 'A', 'B']:
                 sample_list = [];
                 sample_barr = open("./banks/" + bank_path + "/" + k + str(o) + ".pcm", 'rb').read();
 
                 for b in range(1, int(len(sample_barr)/2)):
                     b = b*2;
                     b_chunk = sample_barr[b-2:b];
-                    short = (b_chunk[1] + (b_chunk[0] << 8)) - 32767;
+                    short = (b_chunk[0] + (b_chunk[1] << 8)) - 32767;
                     sample_list.append(short)
 
                 self.key_lut.append(array(sample_list, dtype=int16));

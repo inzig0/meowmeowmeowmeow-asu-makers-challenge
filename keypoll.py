@@ -24,6 +24,7 @@ class KeyPoll:
     def poll_keys(self):
 
         timestamp = time.time();
+        #print(str(timestamp))
         presses = [];
 
         # Poll all newly-pressed keys in this space.

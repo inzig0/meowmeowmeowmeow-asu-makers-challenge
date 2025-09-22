@@ -5,13 +5,26 @@ bank = "sine"
 sr = 48000;
 
 
+def attack(v, x):
+    atk = 0;
+    x = x/(sr/10);
+
+    if x <= 1:
+        atk = pow(x, 2);
+    else:
+        atk = pow(2/3, x);
+
+    return v*atk
+
 def gen_freq(name, freq):
-    fd = open("./" + bank + "/" + name + ".pcm", "wb");
+    fd = open("./" + bank + "/" + name + "1.pcm", "wb");
 
     pcm = bytearray([]);
     i = 0;
     while i < sr:
-        pcm += int( 32767*math.sin( (2*math.pi)*( i / sr )*freq ) + 32767 ).to_bytes(2, 'little');
+        smpl = int(attack(( 32767*math.sin( (2*math.pi)*( i / sr )*freq ) + 32767 ), i));
+        #print(str(smpl));
+        pcm += smpl.to_bytes(2, 'little');
         i += 1;
 
     fd.write(pcm);
