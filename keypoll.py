@@ -20,7 +20,7 @@ class KeyPoll:
 
         GPIO.setmode(GPIO.BOARD);
         for kp in self.key_pins:
-            GPIO.setup(self.kp, GPIO.IN);
+            GPIO.setup(kp, GPIO.IN);
 
 
     def poll_keys(self):
