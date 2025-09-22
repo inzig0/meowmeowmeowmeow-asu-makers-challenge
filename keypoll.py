@@ -47,7 +47,7 @@ class KeyPoll:
 
         for ki in range(0, len(self.key_pins)):
             if GPIO.input(self.key_pins[ki]):
-                presses.append(key_map[ki]);
+                presses.append(self.key_map[ki]);
 
         for ke in self.set:
             try:
