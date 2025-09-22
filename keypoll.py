@@ -52,6 +52,8 @@ class KeyPoll:
         for ke in self.set:
             try:
                 presses.remove(ke);
+            except:
+
 
         self.set = presses;
 
