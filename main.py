@@ -26,7 +26,8 @@ key_poller = KeyPoll(); # See keypoll.py
 
 # Hyperbolic tangent -- for signal mixing
 def tanh(x):
-    return ( pow(e, x) - pow(e, -x) )/( pow(e, x) + pow(e, -x) )
+    x = x/32767;
+    return ( pow(e, x) - pow(e, -x) )/( pow(e, x) + pow(e, -x) ) * 32767
 
 def record():
     keylog = [];
@@ -81,7 +82,7 @@ def render(keylog, bank):
             if s.finished:
                 stream_list.remove(s);
 
-        short = sigsum;
+        short = tanh(sigsum);
 
         final_pcm.append(short);
 
