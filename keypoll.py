@@ -1,4 +1,5 @@
 import time
+import RPi.GPIO as GPIO
 
 
 # Interface for polling all music keys.
@@ -10,15 +11,16 @@ class KeyPoll:
     set = [];
     __doc__ = "Interface for polling all music keys.";
 
-    inc = True;
-    note = 0;
+    key_pins = [29, 31, 32, 33, 35, 36, 37];
+    key_map = [2, 3, 4, 5, 6, 0, 1];
 
     def __init__(self):
 
         # Any required initialization code will live here
 
-        print("Music key poller open!")
-
+        GPIO.setmode(GPIO.BOARD);
+        for kp in self.key_pins:
+            GPIO.setup(self.kp, GPIO.IN);
 
 
     def poll_keys(self):
@@ -43,18 +45,14 @@ class KeyPoll:
         # that key is depressed, remove it from the set
         # list. This will prevent replaying held keys.
 
-        # For the sake of testing, this code will just
-        # play an increasing and decreasing scale.
+        for ki in range(0, len(self.key_pins)):
+            if GPIO.input(self.key_pins[ki]):
+                presses.append(key_map[ki]);
 
-        presses.append(self.note);
-        if self.inc:
-            self.note += 1;
-        if self.inc == False:
-            self.note -= 1;
+        for ke in self.set:
+            try:
+                presses.remove(ke);
 
-        if self.note == 6:
-            self.inc = False;
-        if self.note == 0:
-            self.inc = True;
+        self.set = presses;
 
         return (timestamp, presses)

@@ -9,14 +9,14 @@ from math import e
 
 
 CONST_UI_POLL_RATE = 1;         # Interface poll rate.
-CONST_REC_POLL_RATE = 1;      # Music key poll rate.
+CONST_REC_POLL_RATE = .5;      # Music key poll rate.
 CONST_REC_DURATION = 10;        # Music record duration.
 CONST_SR = 48000;               # Sample rate. Should match all sound banks.
 CONST_POLLING_TOLERANCE = 5;    # How many samples may pass before the next keystroke is considered a new chord
                                 # Playing the same note again should register as a new chord regardless of tolerance
 CONST_OCTAVE_COUNT = 1;         # Number of octaves
 CONST_DEVICE_IDX = 0;
-CONST_MASTER_VOL = 5;
+CONST_MASTER_VOL = 3;
 
 
 ui = UserInterface();   # See iface.py

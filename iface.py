@@ -1,4 +1,4 @@
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 
@@ -10,37 +10,21 @@ class UserInterface:
     __doc__ = "Interface for controls & statuses.";
 
     rec_pin = 11;
-
     start_rec = False;
 
-    # For dummy interface. Do not use.
-    dev_env = True;
-    ots = True;
 
     def __init__(self):
 
-        # Any required initialization code will live here
+        GPIO.setmode(GPIO.BOARD);
+        GPIO.setup(self.rec_pin, GPIO.IN);
 
-        #GPIO.setmode(GPIO.BOARD)
-
-        #GPIO.setup(self.rec_pin, GPIO.IN)
-
-        self.last_poll = time.gmtime(0)
-
-        print("User interface open!");
+        self.last_poll = time.gmtime(0);
 
     def poll_iface(self):
 
         self.last_poll = time.time();
 
-        if self.dev_env == False:
-            if GPIO.input(self.rec_pin):
-                self.start_rec = True;
-            else:
-                self.start_rec = False;
-        else:
-            if self.ots:
-                self.start_rec = True;
-                self.ots = False;
-            else:
-                self.start_rec = False;
+        if GPIO.input(self.rec_pin) and not self.start_rec:
+            self.start_rec = True;
+        elif not GPIO.input(self.rec_pin) and self.start_rec:
+            self.start_rec = False;
