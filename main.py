@@ -16,7 +16,7 @@ CONST_POLLING_TOLERANCE = 5;    # How many samples may pass before the next keys
                                 # Playing the same note again should register as a new chord regardless of tolerance
 CONST_OCTAVE_COUNT = 1;         # Number of octaves
 CONST_DEVICE_IDX = 0;
-CONST_MASTER_VOL = 3;
+CONST_MASTER_VOL = 7;
 
 
 ui = UserInterface();   # See iface.py
@@ -88,8 +88,6 @@ def render(keylog, bank):
 
         if not iterating and len(stream_list) == 0:
             unfinished = False;
-
-    print(len(final_pcm));
 
     return array(final_pcm, dtype=int16);
 

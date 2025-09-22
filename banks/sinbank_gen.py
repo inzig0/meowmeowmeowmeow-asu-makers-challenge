@@ -22,8 +22,7 @@ def gen_freq(name, freq):
     pcm = bytearray([]);
     i = 0;
     while i < sr:
-        smpl = int(attack(( 32767*math.sin( (2*math.pi)*( i / sr )*freq ) + 32767 ), i));
-        #print(str(smpl));
+        smpl = int(attack( 32767*math.sin( (2*math.pi)*( i / sr )*freq ), i) + 32767);
         pcm += smpl.to_bytes(2, 'little');
         i += 1;
 
