@@ -53,7 +53,7 @@ class KeyPoll:
             try:
                 presses.remove(ke);
             except:
-
+                True;
 
         self.set = presses;
 
